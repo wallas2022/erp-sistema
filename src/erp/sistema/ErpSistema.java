@@ -1,10 +1,12 @@
 
 package erp.sistema;
-import java.sql.Connection;
-import java.sql.DriverManager;
+
+
+
+import com.mysql.cj.xdevapi.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -15,41 +17,32 @@ public class ErpSistema {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         
         
-        Connection conexion = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-                // Establecer la conexión a la base de datos (reemplaza con tu URL, usuario y contraseña)
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_erp", "root", "meli$1116");
+        
+        ConexionBD conn = new ConexionBD() ;
+        
+        
+     // Ejemplo de consulta SELECT
+            ResultSet resultado = conn.ejecutarConsulta("SELECT * FROM usuarios");
+            while (resultado.next()) {
+                int id = resultado.getInt("id");
+                String username = resultado.getString("username");
 
-              
-               // Ejecutar una consulta SELECT (reemplaza con tu consulta SQL)
-            String consulta = "SELECT * FROM usuarios";
-            statement =  (Statement) conexion.createStatement();
-            resultSet = statement.executeQuery(consulta);
-
-            // Procesar los resultados de la consulta
-            while (resultSet.next()) {
-                // Obtener datos de las columnas
-                int id = resultSet.getInt("id");
-                String username = resultSet.getString("username");
-                int clave = resultSet.getInt("clave");
-
-                // Haz algo con los datos, por ejemplo, imprimirlos
-                System.out.println("ID: " + id + ", Username: " + username + ", Clave: " + clave);
+                
+                System.out.println("ID: " + id + ", Username: " + username);
+    
             }
-              conexion.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("no se puedo conectar a la base de datos");
-            }
+            
+             // Ejemplo de consulta UPDATE
+            int filasActualizadas = conn.ejecutarActualizacion("UPDATE usuarios SET clave = ? WHERE id = ?", "123456", 1);
+            System.out.println("Se actualizo correctamente: "+ filasActualizadas);
+            // Cerrar la conexión cuando hayas terminado
+            conn.cerrarConexion();
         
         login inicio = new login();
-        
+            
         inicio.setVisible(true);
         
     }

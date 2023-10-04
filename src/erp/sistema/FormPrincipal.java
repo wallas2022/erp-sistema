@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
  *
  * @author Walter Rosales
  */
-public class Principal extends javax.swing.JFrame {
+public class FormPrincipal extends javax.swing.JFrame {
 
     /**
      * Creates new form Principal
@@ -30,7 +30,7 @@ public class Principal extends javax.swing.JFrame {
     // Agrega un TreeSelectionListener al JTree
 
 
-    public Principal() {
+    public FormPrincipal() {
         super("Sistema ERP pagina principal");
         
          // Establecer las dimensiones de la ventana
@@ -122,7 +122,7 @@ public class Principal extends javax.swing.JFrame {
      
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                new FormPrincipal().setVisible(true);
             }
         });
         

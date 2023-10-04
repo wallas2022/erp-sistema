@@ -4,22 +4,20 @@
  */
 package erp.sistema;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author Walter Rosales
- */
+
 public class login extends javax.swing.JFrame {
 
     /**
      * Creates new form paginaPrincipal
      */
+    Usuarios usuario = new Usuarios();
+    ConexionBD conn = new ConexionBD();
     public login() {
         super("Acceso a ERP");
         initComponents();
+        
         
     }
 
@@ -76,6 +74,16 @@ public class login extends javax.swing.JFrame {
         });
 
         usr_clave.setText("jPasswordField1");
+        usr_clave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                usr_claveMouseClicked(evt);
+            }
+        });
+        usr_clave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usr_claveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,26 +121,49 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt_userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_userActionPerformed
-        try {
-            ConexionBD conn = new ConexionBD() ;
-        } catch (SQLException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }//GEN-LAST:event_txt_userActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+           
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-         Principal principal = new Principal();
-         principal.setVisible(true);
-         this.dispose();
+     String username = txt_user.getText(); // Obtiene el valor del campo de usuario
+     String clave = new String(usr_clave.getPassword()); // Obtiene el valor del campo de clave (si es un JPasswordField)
+    
+     if (usuario != null && conn != null) {
+          int resultadoAutenticacion = usuario.autenticarUsuario(username, clave, conn);
+          System.out.println(resultadoAutenticacion);
+          System.out.println(username);
+          if (resultadoAutenticacion == 1) {
+              Principal principal = new Principal();
+              principal.setVisible(true);
+              this.dispose();
+           } else if (resultadoAutenticacion == 0) {
+              // Autenticación fallida, muestra un mensaje de error.
+                JOptionPane.showMessageDialog(null, "La contraseña puede que no corresponda.");
+           } else {
+                    // Maneja otros casos según sea necesario.
+                    JOptionPane.showMessageDialog(null, "Autenticación fallida 02. Verifica tus credenciales.");
+                 }
+            } else {
+                     JOptionPane.showMessageDialog(null, "Autenticación fallida 03. Verifica tus credenciales.");
+              
+            }
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void txt_userMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_userMouseClicked
         this.txt_user.setText(" ");
     }//GEN-LAST:event_txt_userMouseClicked
+
+    private void usr_claveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usr_claveActionPerformed
+        
+    }//GEN-LAST:event_usr_claveActionPerformed
+
+    private void usr_claveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usr_claveMouseClicked
+        this.usr_clave.setText(" ");
+    }//GEN-LAST:event_usr_claveMouseClicked
 
     /**
      * @param args the command line arguments

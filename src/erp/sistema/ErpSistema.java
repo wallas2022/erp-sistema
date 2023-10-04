@@ -10,7 +10,7 @@ public class ErpSistema {
 
     public static void main(String[] args) throws SQLException {
         
-        login inicio = new login();
+        Formlogin inicio = new Formlogin();
             
         inicio.setVisible(true);
         

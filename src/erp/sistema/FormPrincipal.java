@@ -68,7 +68,10 @@ public class FormPrincipal extends javax.swing.JFrame {
                  // Verifica si el nodo seleccionado es igual al nodo "Usuarios"
                  if (selectedNode.toString().equals("Usuarios")) {
                      // Haz algo cuando se haga clic en el nodo "Usuarios"
-                        JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Usuarios'");
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Usuarios'");
+                       FormUsuarios nuevoU = new FormUsuarios();
+                       nuevoU.setVisible(true);
+                       
                      }
                  }
              }

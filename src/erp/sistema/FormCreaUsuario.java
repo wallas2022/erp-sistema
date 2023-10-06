@@ -171,7 +171,28 @@ public class FormCreaUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+        String username =     jTextField1.getText();
+        String nombre_completo = jTextField2.getText();
+        String clave = jTextField3.getText();
+        System.out.println("username: "+ username);
+        System.out.println("nombre completos: "+ nombre_completo);
+        System.out.println("clave: "+ clave);
+        if (usuario != null && conn != null) {
+            if (username != null ){
+                if(nombre_completo != null ){
+                
+                   if ( clave != null ){
+                        usuario.setUsername(username);
+                        usuario.setNombresCompletos(nombre_completo);
+                        usuario.setClave(clave); 
+                   Usuarios u = usuario.crearUsuario(conn,usuario);
+                          JOptionPane.showMessageDialog(null, "Se creo el usuario:" + u.getNombresCompletos());
+                          this.setVisible(false);
+                   }
+                }
+            
+            }       
+        }
       
         
     }//GEN-LAST:event_jButton1ActionPerformed

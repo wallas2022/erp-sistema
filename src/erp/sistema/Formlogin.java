@@ -45,7 +45,6 @@ public class Formlogin extends javax.swing.JFrame {
         jLabel2.setText("Clave:");
 
         txt_user.setForeground(new java.awt.Color(102, 102, 102));
-        txt_user.setText("Ej: usuario01");
         txt_user.setName("txt_usuario"); // NOI18N
         txt_user.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -73,7 +72,7 @@ public class Formlogin extends javax.swing.JFrame {
             }
         });
 
-        usr_clave.setText("jPasswordField1");
+        usr_clave.setToolTipText("");
         usr_clave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 usr_claveMouseClicked(evt);

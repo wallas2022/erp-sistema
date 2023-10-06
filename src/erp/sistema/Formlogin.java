@@ -4,6 +4,8 @@
  */
 package erp.sistema;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 
@@ -16,6 +18,21 @@ public class Formlogin extends javax.swing.JFrame {
     ConexionBD conn = new ConexionBD();
     public Formlogin() {
         super("Acceso a ERP");
+         
+            // Configurar el tamaño de la ventana
+            int anchoVentana = 300;
+            int altoVentana = 300;
+            this.setSize(anchoVentana, altoVentana);
+            
+            // Obtener el tamaño de la pantalla
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            
+            // Calcular las coordenadas para centrar la ventana
+            int x = (screenSize.width - anchoVentana) / 2;
+            int y = (screenSize.height - altoVentana) / 2;
+            
+            // Establecer la ubicación de la ventana en el centro
+            this.setLocation(x, y);
         initComponents();
         
         
@@ -138,6 +155,7 @@ public class Formlogin extends javax.swing.JFrame {
           if (resultadoAutenticacion == 1) {
               FormPrincipal principal = new FormPrincipal();
               principal.setVisible(true);
+              this.setVisible(false);
               this.dispose();
            } else if (resultadoAutenticacion == 0) {
               // Autenticación fallida, muestra un mensaje de error.

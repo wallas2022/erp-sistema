@@ -4,6 +4,7 @@
  */
 package erp.sistema;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +19,14 @@ public class FormCreaUsuario extends javax.swing.JFrame {
      ConexionBD conn = new ConexionBD();
      Usuarios usuario = new Usuarios();
     public FormCreaUsuario() {
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         initComponents();
+        
+        
+        
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

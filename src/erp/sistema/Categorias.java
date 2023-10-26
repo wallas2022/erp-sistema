@@ -12,13 +12,13 @@ import java.util.ArrayList;
 public class Categorias {
     private int id;
     private String nombre;
-    private String descripción;
+    private String descripcion;
     private int estado;
 
-    public Categorias(int id, String nombre, String descripción, int estado) {
+    public Categorias(int id, String nombre, String descripcion, int estado) {
         this.id = id;
         this.nombre = nombre;
-        this.descripción = descripción;
+        this.descripcion = descripcion;
         this.estado = estado;
     }
 
@@ -41,12 +41,12 @@ public class Categorias {
         this.nombre = nombre;
     }
 
-    public String getDescripción() {
-        return descripción;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripción(String descripción) {
-        this.descripción = descripción;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public int getEstado() {
@@ -62,10 +62,10 @@ public class Categorias {
       // Método para crear un usuario utilizando un procedimiento almacenado
     public Categorias crearCategoria(ConexionBD conexionBD, Categorias categoria) {
         try (Connection connection = conexionBD.conectar()) {
-            String sql = "{CALL crearUsuario(?, ?, ?)}";
+            String sql = "{CALL CrearCategoria(?, ?, ?)}";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, categoria.nombre);
-                statement.setString(2, categoria.descripción);
+                statement.setString(2, categoria.descripcion);
                 statement.setInt(3, categoria.estado);
                 statement.execute();
             }
@@ -92,7 +92,7 @@ public class Categorias {
                    Categorias  categoria = new Categorias();
                    categoria.setId(resultSet.getInt("id"));
                    categoria.setNombre(resultSet.getString("nombre"));
-                   categoria.setDescripción(resultSet.getString("descripcion"));
+                   categoria.setDescripcion(resultSet.getString("descripcion"));
                    categoria.setEstado( resultSet.getInt( "estado"));
 
                     
@@ -110,15 +110,17 @@ public class Categorias {
     
      // Modificar usuario
     public int modificarCategoria(Categorias categoria) throws SQLException{
-         String UPDATE_CATEGORIA_SQL = "UPDATE Categorias SET nombre = ?, descripción = ?, estado = ? WHERE id = ?";
+         String UPDATE_CATEGORIA_SQL = "UPDATE Categorias SET nombre = ?, descripcion = ?, estado = ? WHERE id = ?";
            ConexionBD conn = new ConexionBD();
            Connection connection = null;
            connection = conn.conectar();
           
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CATEGORIA_SQL);
+            preparedStatement.setInt(4, categoria.id);
             preparedStatement.setString(1, categoria.nombre);
-            preparedStatement.setString(2, categoria.descripción);
+            preparedStatement.setString(2, categoria.descripcion);
             preparedStatement.setInt(3, categoria.estado);
+            
             System.out.println(categoria.toString());
 
             int rowsUpdated = preparedStatement.executeUpdate();

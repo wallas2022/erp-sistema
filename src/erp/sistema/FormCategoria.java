@@ -4,9 +4,15 @@
  */
 package erp.sistema;
 
+import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -35,14 +41,14 @@ public class FormCategoria extends javax.swing.JFrame {
       //  JTable tabla = new JTable(modelo);
        modelo.addColumn("id");
        modelo.addColumn("Nombre");
-       modelo.addColumn("Descripción");
+       modelo.addColumn("Descripcion");
        modelo.addColumn("Estado");
        
        for (Categorias cat: datos){
            Object[] fila =  new Object[4];
            fila[0] = cat.getId();
            fila[1] = cat.getNombre();
-           fila[2] = cat.getDescripción();
+           fila[2] = cat.getDescripcion();
            fila[3] = cat.getEstado();
            modelo.addRow(fila);
            System.out.println(cat.getId()+ " "+ cat.getNombre());
@@ -70,6 +76,11 @@ public class FormCategoria extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txt_cat_descripcion = new javax.swing.JTextArea();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,7 +115,28 @@ public class FormCategoria extends javax.swing.JFrame {
 
         tabla.setAutoCreateRowSorter(true);
         tabla.setModel(modelo);
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabla);
+
+        txt_cat_descripcion.setColumns(20);
+        txt_cat_descripcion.setRows(5);
+        jScrollPane1.setViewportView(txt_cat_descripcion);
+
+        jCheckBox1.setText("Activo");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("ID:");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,51 +145,106 @@ public class FormCategoria extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
-                        .addGap(141, 141, 141))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1))
+                                .addGap(141, 141, 141)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(28, 28, 28))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox1)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel3)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(368, 368, 368))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(36, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jCheckBox1)
+                        .addGap(56, 56, 56))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(193, 193, 193))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String nombre =     jTextField1.getText();
+        String descripcion = txt_cat_descripcion.getText();
+        int estado = 0;
+          boolean isChecked = jCheckBox1.isSelected();
+                if (isChecked) {
+                    estado = 1;
+                } else {
+                    estado = 0;
+                }
+
+        if (nombre != null && conn != null) {
+            if (descripcion != null ){
+                   
+                   categoria.setNombre(nombre);
+                   categoria.setDescripcion(descripcion);
+                   categoria.setEstado(estado);
+              
+                   Categorias c = categoria.crearCategoria(conn,categoria);
+                   if (c != null ){
+                       
+                       JOptionPane.showMessageDialog(null, "Se creo la categoría:" + c.getNombre());
+
+                  
+        
+                          limpiar();
+                           
+                   } else {
+                       JOptionPane.showMessageDialog(null, "Error al crear la categoría.");
+                   }       
+                 
+            
+            }       
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -165,8 +252,76 @@ public class FormCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+         boolean estado = jCheckBox1.isSelected();
+         int estaV = 0;
+         if(estado == true)
+             estaV = 1;
+         else 
+             estaV = 0;
+        Categorias catmod = new Categorias();
+             catmod.setId(Integer.parseInt(jLabel4.getText()));
+             catmod.setNombre(jTextField1.getText());
+             catmod.setDescripcion(txt_cat_descripcion.getText());
+             catmod.setEstado(estaV);
+           
+             System.out.println(catmod.getId());
+          try {
+              int result = catmod.modificarCategoria(catmod);
+              if (result == 1){
+                   datos =  catmod.listarCategorias(conn);
+                   for (Categorias cat: datos){
+                        Object[] fila =  new Object[4];
+                        fila[0] = cat.getId();
+                        fila[1] = cat.getNombre();
+                        fila[2] = cat.getDescripcion();
+                        fila[3] = cat.getEstado();
+                        modelo.addRow(fila);
+                        System.out.println(cat.getId()+ " "+ cat.getNombre());
+                    }// fin del for
+                  
+                          limpiar();
+               
+                JOptionPane.showMessageDialog(null, "La Categoria: "+ catmod.getNombre() + " fue modificado correctamente.");
+              } 
+          } catch (SQLException ex) {
+              Logger.getLogger(FormUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+          }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+                                    
+       int rowIndex = tabla.getSelectedRow();
+      // TableModel modelo = tabla.getModel();
+      limpiar();
+       Object[] rowData = new Object[modelo.getColumnCount()];
+        for (int i = 0; i < modelo.getColumnCount(); i++) {
+            rowData[i] = modelo.getValueAt(rowIndex, i);
+        }
+        String desc = "";
+        int estado = Integer.parseInt(rowData[3].toString());
+        System.out.println(rowData[3]);
+        jLabel4.setText(rowData[0].toString());
+        jTextField1.setText(rowData[1].toString());
+        if(rowData[2] == null )
+           desc = "";
+        else 
+            desc = rowData[2].toString();
+        txt_cat_descripcion.setText(desc);
+        if (estado == 1){
+              jCheckBox1.setSelected(true);
+        }
+              else
+        {
+            jCheckBox1.setSelected(false);
+        }
+       
+        
+             
+    }//GEN-LAST:event_tablaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -186,10 +341,42 @@ public class FormCategoria extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tabla;
+    private javax.swing.JTextArea txt_cat_descripcion;
     // End of variables declaration//GEN-END:variables
+
+    public void limpiar() {
+        
+       
+         ArrayList<Categorias> datos2 = categoria.listarCategorias(conn);
+         tabla.setAutoCreateRowSorter(true);
+        int rowCount = modelo.getRowCount();
+                for (int i = rowCount - 1; i >= 0; i--) {
+                    modelo.removeRow(i);
+                }
+         for (Categorias cat: datos2){
+           Object[] fila =  new Object[4];
+           fila[0] = cat.getId();
+           fila[1] = cat.getNombre();
+           fila[2] = cat.getDescripcion();
+           fila[3] = cat.getEstado();
+           modelo.addRow(fila);
+           System.out.println(cat.getId()+ " "+ cat.getNombre());
+       }// fin del for
+          
+         // Limpiar campos de entrada
+                         
+          jTextField1.setText("");
+          txt_cat_descripcion.setText("");
+          jCheckBox1.setSelected(false);
+          jLabel4.setText("");
+    }
 }

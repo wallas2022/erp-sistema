@@ -72,7 +72,6 @@ public class FormCategoria extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
@@ -96,13 +95,6 @@ public class FormCategoria extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Eliminar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
             }
         });
 
@@ -160,9 +152,7 @@ public class FormCategoria extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(28, 28, 28))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,8 +191,6 @@ public class FormCategoria extends javax.swing.JFrame {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(193, 193, 193))
@@ -247,10 +235,6 @@ public class FormCategoria extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
          boolean estado = jCheckBox1.isSelected();
          int estaV = 0;
@@ -268,16 +252,6 @@ public class FormCategoria extends javax.swing.JFrame {
           try {
               int result = catmod.modificarCategoria(catmod);
               if (result == 1){
-                   datos =  catmod.listarCategorias(conn);
-                   for (Categorias cat: datos){
-                        Object[] fila =  new Object[4];
-                        fila[0] = cat.getId();
-                        fila[1] = cat.getNombre();
-                        fila[2] = cat.getDescripcion();
-                        fila[3] = cat.getEstado();
-                        modelo.addRow(fila);
-                        System.out.println(cat.getId()+ " "+ cat.getNombre());
-                    }// fin del for
                   
                           limpiar();
                
@@ -302,7 +276,7 @@ public class FormCategoria extends javax.swing.JFrame {
             rowData[i] = modelo.getValueAt(rowIndex, i);
         }
         String desc = "";
-        int estado = Integer.parseInt(rowData[3].toString());
+        String estado = rowData[3].toString();
         System.out.println(rowData[3]);
         jLabel4.setText(rowData[0].toString());
         jTextField1.setText(rowData[1].toString());
@@ -311,7 +285,7 @@ public class FormCategoria extends javax.swing.JFrame {
         else 
             desc = rowData[2].toString();
         txt_cat_descripcion.setText(desc);
-        if (estado == 1){
+        if (estado == "Activo"){
               jCheckBox1.setSelected(true);
         }
               else
@@ -339,7 +313,6 @@ public class FormCategoria extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
@@ -363,11 +336,15 @@ public class FormCategoria extends javax.swing.JFrame {
                     modelo.removeRow(i);
                 }
          for (Categorias cat: datos2){
+             
            Object[] fila =  new Object[4];
+           String estado = "Activo";
+           if (cat.getEstado() == 1 ){ estado = "Activo";  } else { estado = "Inactivo "; }
            fila[0] = cat.getId();
            fila[1] = cat.getNombre();
            fila[2] = cat.getDescripcion();
-           fila[3] = cat.getEstado();
+           fila[3] = estado;
+           
            modelo.addRow(fila);
            System.out.println(cat.getId()+ " "+ cat.getNombre());
        }// fin del for

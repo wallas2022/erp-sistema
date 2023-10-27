@@ -34,13 +34,11 @@ public class FormPrincipal extends javax.swing.JFrame {
         super("Sistema ERP pagina principal");
         
          // Establecer las dimensiones de la ventana
-        //this.setSize(800, 600);
+        this.setSize(1200, 800);
         // JFrame frame = new JFrame("Menu principal");
         // Establecer la operación al cerrar la ventana
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-        // Maximizar la ventana
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+      
+        this.setExtendedState(JFrame.MAXIMIZED_HORIZ);
         // Hacer visible la ventana
         this.add(new JScrollPane(menu){
         
@@ -51,18 +49,28 @@ public class FormPrincipal extends javax.swing.JFrame {
         this.setVisible(true);  
         DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode("Herramientas del sistema"); // Nodo padre
         DefaultMutableTreeNode childNode = new DefaultMutableTreeNode("Usuarios"); // Nodo hijo
+        DefaultMutableTreeNode compras   = new DefaultMutableTreeNode("Compras");
+        DefaultMutableTreeNode ventas    = new DefaultMutableTreeNode("Ventas");
+        DefaultMutableTreeNode childVenta = new DefaultMutableTreeNode("Facturación");
+        DefaultMutableTreeNode childCompra = new DefaultMutableTreeNode("Registrar compra");
         DefaultMutableTreeNode inventario = new DefaultMutableTreeNode("Inventarios"); // Nodo padre
         DefaultMutableTreeNode childProducto = new DefaultMutableTreeNode("Productos"); // Nodo hijo
         DefaultMutableTreeNode childCategoria = new DefaultMutableTreeNode("Categoria"); // Nodo hijo
         DefaultMutableTreeNode childProd = new DefaultMutableTreeNode("Producto");
-        DefaultMutableTreeNode childIngresos = new DefaultMutableTreeNode("Ingresos");
+        DefaultMutableTreeNode childIngresos = new DefaultMutableTreeNode("Ingresos productos");
+        DefaultMutableTreeNode childAlmacenes = new DefaultMutableTreeNode("Almacenes");
         root.add(parentNode); // Agrega el nodo padre al nodo raíz
         parentNode.add(childNode); // Agrega el nodo hijo al nodo padre
         root.add(inventario);
+        root.add(compras);
+        root.add(ventas);
         inventario.add(childProducto);
         childProducto.add(childCategoria);
         childProducto.add(childProd);
         inventario.add(childIngresos);
+        inventario.add(childAlmacenes);
+        ventas.add(childVenta);
+        compras.add(childCompra);
 
         // Actualiza el modelo del árbol para reflejar los cambios
         treeModel.reload();
@@ -91,10 +99,24 @@ public class FormPrincipal extends javax.swing.JFrame {
                        
                      }
                   if (selectedNode.toString().equals("Producto")) {
-                     // Haz algo cuando se haga clic en el nodo "Usuarios"
+                     // Haz algo cuando se haga clic en el nodo "Producto"
                        // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Usuarios'");
                        FormProductos cate = new FormProductos();
                        cate.setVisible(true);
+                       
+                     }
+                  if (selectedNode.toString().equals("Almacenes")) {
+                     // Haz algo cuando se haga clic en el nodo "Almacenes"
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Almacenes'");
+                       FormAlmacen alm = new FormAlmacen();
+                       alm.setVisible(true);
+                       
+                     }
+                  if (selectedNode.toString().equals("Compras")) {
+                     // Haz algo cuando se haga clic en el nodo "Compras"
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Compras'");
+                       FormCompra comp = new FormCompra();
+                       comp.setVisible(true);
                        
                      }
                  

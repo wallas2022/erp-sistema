@@ -108,7 +108,7 @@ public class Categorias {
     return listacategorias;
     };
     
-     // Modificar usuario
+     // Modificar categoria
     public int modificarCategoria(Categorias categoria) throws SQLException{
          String UPDATE_CATEGORIA_SQL = "UPDATE Categorias SET nombre = ?, descripcion = ?, estado = ? WHERE id = ?";
            ConexionBD conn = new ConexionBD();

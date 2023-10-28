@@ -54,7 +54,9 @@ public class FormPrincipal extends javax.swing.JFrame {
         DefaultMutableTreeNode childVenta = new DefaultMutableTreeNode("Facturación");
         DefaultMutableTreeNode childCompra = new DefaultMutableTreeNode("Registrar compra");
         DefaultMutableTreeNode inventario = new DefaultMutableTreeNode("Inventarios"); // Nodo padre
-        DefaultMutableTreeNode childProducto = new DefaultMutableTreeNode("Productos"); // Nodo hijo
+        DefaultMutableTreeNode childProducto = new DefaultMutableTreeNode("Productos"); // 
+        DefaultMutableTreeNode childProveedor = new DefaultMutableTreeNode("Proveedores"); //Nodo hijo
+        DefaultMutableTreeNode childClientes = new DefaultMutableTreeNode("Clientes");
         DefaultMutableTreeNode childCategoria = new DefaultMutableTreeNode("Categoria"); // Nodo hijo
         DefaultMutableTreeNode childProd = new DefaultMutableTreeNode("Producto");
         DefaultMutableTreeNode childIngresos = new DefaultMutableTreeNode("Ingresos productos");
@@ -64,6 +66,7 @@ public class FormPrincipal extends javax.swing.JFrame {
         root.add(inventario);
         root.add(compras);
         root.add(ventas);
+        
         inventario.add(childProducto);
         childProducto.add(childCategoria);
         childProducto.add(childProd);
@@ -71,6 +74,8 @@ public class FormPrincipal extends javax.swing.JFrame {
         inventario.add(childAlmacenes);
         ventas.add(childVenta);
         compras.add(childCompra);
+        compras.add(childProveedor);
+        ventas.add(childClientes);
 
         // Actualiza el modelo del árbol para reflejar los cambios
         treeModel.reload();
@@ -117,6 +122,20 @@ public class FormPrincipal extends javax.swing.JFrame {
                        // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Compras'");
                        FormCompra comp = new FormCompra();
                        comp.setVisible(true);
+                       
+                     }
+                   if (selectedNode.toString().equals("Proveedores")) {
+                     // Haz algo cuando se haga clic en el nodo "Proveedores"
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Compras'");
+                       FromProveedor pro = new FromProveedor();
+                       pro.setVisible(true);
+                       
+                     }
+                   if (selectedNode.toString().equals("Clientes")) {
+                     // Haz algo cuando se haga clic en el nodo "Clientes"
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Compras'");
+                       FormCliente pro = new FormCliente();
+                       pro.setVisible(true);
                        
                      }
                  

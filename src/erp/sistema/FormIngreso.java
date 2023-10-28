@@ -349,6 +349,7 @@ public class FormIngreso extends javax.swing.JFrame {
                 ingreso.setCantidad(cantidad);
                 ingreso.setMotivo(motivo);
                 ingreso.crearIngreso(conn, ingreso);
+                prod.actualizarStock(conn, cantidad,idProducto);
                 
                 
             }

@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
 public class Proveedor {
     private int id;
     private String nombre;
@@ -19,6 +18,8 @@ public class Proveedor {
     private int estado;
     
     public Proveedor(){}
+     
+   
 
     public Proveedor(int id, String nombre, String direccion, String telefono, String correo, String nit, int estado) {
         this.id = id;
@@ -169,5 +170,38 @@ public class Proveedor {
     return rowsUpdated;
     
     };
+   
+    public Proveedor items(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        return this;
+    }
+       
+@Override
+public String toString() {
+    return nombre;
+}
+
+ // listar proveedor
+    public int mostrarProveedor(ConexionBD conexionBD, String nombre) {
+
+         String sql = "SELECT * FROM proveedores WHERE nombre = ?";
+        try (PreparedStatement stmt = conexionBD.conectar().prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Proveedor proveedor = new Proveedor();
+                    proveedor.setId(rs.getInt("id"));
+                    proveedor.setNombre(rs.getString("nombre"));
+                    // Set other attributes as well
+                    return proveedor.getId();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // O manejar la excepción de manera más adecuada
+        }
+        return 0; // Devuelve null si no encuentra el almacén
+  
+    }
     
 }

@@ -117,6 +117,32 @@ public class Producto {
     public void setCantidadStock(int cantidadStock) {
         this.cantidadStock = cantidadStock;
     }
+    
+    /**
+     * Actualiza el stock del producto en la base de datos.
+     * 
+     * @param connection la conexión a la base de datos.
+     * @param nuevoStock el nuevo stock del producto.
+     * @return true si se actualizó con éxito, false en caso contrario.
+     */
+    public boolean actualizarStock(ConexionBD conexionBD, int nuevoStock,int productoid) {
+        String query = "UPDATE productos SET cantidadStock = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = conexionBD.conectar().prepareStatement(query)) {
+            preparedStatement.setInt(1, nuevoStock);
+            preparedStatement.setInt(2, productoid);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                this.cantidadStock = nuevoStock; // Actualizamos el valor en el objeto actual.
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 
     // Método para incrementar la cantidad en stock
     public void aumentarStock(int cantidad) {
@@ -243,6 +269,29 @@ public class Producto {
     return rowsUpdated;
     
     };
+    
+    
+ // listar producto
+    public int mostrarProducto(ConexionBD conexionBD, String codigo) {
+
+         String sql = "SELECT * FROM productos WHERE codigo = ?";
+        try (PreparedStatement stmt = conexionBD.conectar().prepareStatement(sql)) {
+            stmt.setString(1, codigo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Producto producto = new Producto();
+                    producto.setId(rs.getInt("id"));
+                    producto.setCodigo(rs.getString("codigo"));
+                    // Set other attributes as well
+                    return producto.getId();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // O manejar la excepción de manera más adecuada
+        }
+        return 0; // Devuelve null si no encuentra el almacén
+  
+    }
     
       
 }

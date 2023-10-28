@@ -1,6 +1,8 @@
 
 package erp.sistema;
 
+import static com.mysql.cj.conf.PropertyKey.PASSWORD;
+import java.awt.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,6 +95,30 @@ public class Almacen {
     return listaalmacenes;
     };
     
+     // listar almacen
+    public int mostrarAlmacen(ConexionBD conexionBD, String nombre) {
+
+         String sql = "SELECT * FROM almacenes WHERE nombre = ?";
+        try (PreparedStatement stmt = conexionBD.conectar().prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Almacen almacen = new Almacen();
+                    almacen.setId(rs.getInt("id"));
+                    almacen.setNombre(rs.getString("nombre"));
+                    // Set other attributes as well
+                    return almacen.getId();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // O manejar la excepción de manera más adecuada
+        }
+        return 0; // Devuelve null si no encuentra el almacén
+  
+    }
+    
+    
+      
      // Modificar almacen
     public int modificarAlmacen(Almacen almacen) throws SQLException{
          String UPDATE_ALMACEN_SQL = "UPDATE Almacenes SET nombre = ?,  estado = ? WHERE id = ?";
@@ -115,4 +141,10 @@ public class Almacen {
     return rowsUpdated;
     
     };
+    
+@Override
+public String toString() {
+    return nombre;
+}
+
 }

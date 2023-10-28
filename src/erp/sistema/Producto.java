@@ -117,6 +117,8 @@ public class Producto {
     public void setCantidadStock(int cantidadStock) {
         this.cantidadStock = cantidadStock;
     }
+    
+    
 
     // Método para incrementar la cantidad en stock
     public void aumentarStock(int cantidad) {
@@ -243,6 +245,29 @@ public class Producto {
     return rowsUpdated;
     
     };
+    
+    
+ // listar producto
+    public int mostrarProducto(ConexionBD conexionBD, String codigo) {
+
+         String sql = "SELECT * FROM productos WHERE codigo = ?";
+        try (PreparedStatement stmt = conexionBD.conectar().prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Producto producto = new Producto();
+                    producto.setId(rs.getInt("id"));
+                    producto.setCodigo(rs.getString("codigo"));
+                    // Set other attributes as well
+                    return producto.getId();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // O manejar la excepción de manera más adecuada
+        }
+        return 0; // Devuelve null si no encuentra el almacén
+  
+    }
     
       
 }

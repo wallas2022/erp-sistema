@@ -52,7 +52,8 @@ public class FormPrincipal extends javax.swing.JFrame {
         DefaultMutableTreeNode compras   = new DefaultMutableTreeNode("Compras");
         DefaultMutableTreeNode ventas    = new DefaultMutableTreeNode("Ventas");
         DefaultMutableTreeNode childVenta = new DefaultMutableTreeNode("Facturación");
-        DefaultMutableTreeNode childCompra = new DefaultMutableTreeNode("Registrar compra");
+        DefaultMutableTreeNode childIngreso = new DefaultMutableTreeNode("Ingresos");
+        DefaultMutableTreeNode childSalida = new DefaultMutableTreeNode("Salidas");
         DefaultMutableTreeNode inventario = new DefaultMutableTreeNode("Inventarios"); // Nodo padre
         DefaultMutableTreeNode childProducto = new DefaultMutableTreeNode("Productos"); // 
         DefaultMutableTreeNode childProveedor = new DefaultMutableTreeNode("Proveedores"); //Nodo hijo
@@ -73,7 +74,8 @@ public class FormPrincipal extends javax.swing.JFrame {
         inventario.add(childIngresos);
         inventario.add(childAlmacenes);
         ventas.add(childVenta);
-        compras.add(childCompra);
+        ventas.add(childSalida);
+        compras.add(childIngreso);
         compras.add(childProveedor);
         ventas.add(childClientes);
 
@@ -136,6 +138,20 @@ public class FormPrincipal extends javax.swing.JFrame {
                        // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Compras'");
                        FormCliente pro = new FormCliente();
                        pro.setVisible(true);
+                       
+                     }
+                   if (selectedNode.toString().equals("Ingresos")) {
+                     // Haz algo cuando se haga clic en el nodo "Ingresos"
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Ingresos'");
+                       FormIngreso Ing = new FormIngreso("","");
+                       Ing.setVisible(true);
+                       
+                     }
+                   if (selectedNode.toString().equals("Salidas")) {
+                     // Haz algo cuando se haga clic en el nodo "Salidas"
+                       // JOptionPane.showMessageDialog(null, "Haz clic en el nodo 'Salidas'");
+                      // FormSalida sal = new FormSalida();
+                    ///   sal.setVisible(true);
                        
                      }
                  

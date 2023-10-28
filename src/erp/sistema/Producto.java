@@ -1,8 +1,16 @@
 
-package erp.sistema;
+package erp.sistema ;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 
 public class Producto {
-    private int id;
+    private int id ;
     private String codigo;
     private String nombre;
     private double precioCosto;
@@ -10,11 +18,13 @@ public class Producto {
     private int cantidadStock;
     private int maximos;
     private int minimos;
-    private boolean estado;
-  
-    
+    private int estado;
+    Categorias categoria;
 
-    public Producto(int id, String codigo, String nombre, double precioCosto, double precioVenta, int cantidadStock, int maximos, int minimos, boolean estado) {
+  
+    public Producto(){}
+
+    public Producto(int id, String codigo, String nombre, double precioCosto, double precioVenta, int cantidadStock, int maximos, int minimos, int estado) {
         this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
@@ -24,11 +34,15 @@ public class Producto {
         this.maximos = maximos;
         this.minimos = minimos;
         this.estado = estado;
+        
     }
 
     
 
     // Métodos getter y setter para los atributos
+    public void setId(int id){
+      this.id = id;
+    }
     public int getId() {
         return id;
     }
@@ -40,7 +54,11 @@ public class Producto {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
+    public void setPrecioCosto(Double precioCosto){
+    
+        this.precioCosto = precioCosto;
+    }
     public double getPrecioCosto() {
         return precioCosto;
     }
@@ -65,12 +83,15 @@ public class Producto {
         this.precioCosto = precioCosto;
     }
 
-    public boolean isEstado() {
+    public int isEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
+    }
+    public int getEstado(){
+        return estado;
     }
 
     public int getCantidadStock() {
@@ -115,10 +136,113 @@ public class Producto {
     public double calcularValorEnInventario() {
         return precioVenta * cantidadStock;
     }
+    
+    
+    public Categorias getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categorias categoria) {
+        this.categoria = categoria;
+    }
 
     // Representación en cadena del producto
     @Override
     public String toString() {
         return "ID: " + id + ", Nombre: " + nombre + ", Precio: $" + precioVenta + ", Stock: " + cantidadStock;
     }
+    
+      // Método para crear un producto utilizando un procedimiento almacenado
+    public Producto crearProducto(ConexionBD conexionBD, Producto producto) {
+        try (Connection connection = conexionBD.conectar()) {
+            String sql = "{CALL insertarProducto(?, ?, ?,?,?,?,?,?)}";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, producto.codigo);
+                statement.setString(2, producto.nombre);
+                statement.setDouble(3,producto.precioCosto);
+                statement.setDouble(4,producto.precioVenta);
+                statement.setInt(5,producto.cantidadStock);
+                statement.setInt(6,producto.maximos);
+                statement.setInt(7,producto.minimos);
+                statement.setInt(8,producto.estado);
+                statement.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conexionBD.desconectar();
+        }
+        return producto;
+    }
+    
+    
+     // listar productos
+    public ArrayList<Producto> listarProductos(ConexionBD conexionBD){
+
+  
+    ArrayList<Producto> listaproductos = new ArrayList<>();
+  
+    try (Connection connection = conexionBD.conectar()) {
+        
+        String sql = "SELECT * FROM productos";
+         try (Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(sql)) {
+                 while (resultSet.next()) {
+                   Producto  producto = new Producto();
+                   producto.setId(resultSet.getInt("id"));
+                   producto.setCodigo(resultSet.getString("codigo"));
+                   producto.setNombre(resultSet.getString("nombre"));
+                   producto.setPrecioCosto(resultSet.getDouble( "preciocosto"));
+                   producto.setPrecioVenta( resultSet.getDouble( "precioVenta"));
+                   producto.setCantidadStock(resultSet.getInt("cantidadStock"));
+                   producto.setMaximos(resultSet.getInt("maximos"));
+                   producto.setMinimos(resultSet.getInt("minimos"));
+                   producto.setEstado(resultSet.getInt( "estado"));
+                  
+
+                    
+                    listaproductos.add(producto);
+                }
+            }
+    } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conexionBD.desconectar();
+        }
+     System.out.println(listaproductos);
+    return listaproductos;
+    };
+    
+      // Modificar producto
+    public int modificarProducto(Producto producto) throws SQLException{
+         String UPDATE_PRODUCTO_SQL = "UPDATE productos SET codigo = ?, nombre = ?, precioCosto = ?, precioVenta = ?, cantidadStock = ?, maximos = ?, minimos =?, estado = ?"
+                 
+                 + " WHERE id = ?";
+           ConexionBD conn = new ConexionBD();
+           Connection connection = null;
+           connection = conn.conectar();
+          
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCTO_SQL);
+            preparedStatement.setInt(9, producto.id);
+            preparedStatement.setString(1, producto.codigo);
+            preparedStatement.setString(2, producto.nombre);
+            preparedStatement.setDouble(3, producto.precioCosto);
+            preparedStatement.setDouble(4, producto.precioVenta);
+            preparedStatement.setInt(5, producto.cantidadStock);
+            preparedStatement.setInt(6,producto.maximos);
+            preparedStatement.setInt(7,producto.minimos);
+            preparedStatement.setInt(8,producto.estado);
+            
+            System.out.println(producto.toString());
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            
+        System.out.println(rowsUpdated);
+      
+  
+    return rowsUpdated;
+    
+    };
+    
+      
 }
